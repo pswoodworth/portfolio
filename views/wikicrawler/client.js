@@ -118,9 +118,21 @@ var currentX = getX(currentAngle);
 var currentY = getY(currentAngle);
 var radius = 100;
 var arcs = 0;
+var dampening = 50;
+
 
 function mutate(amount){
   currentMutation += amount;
+  dampening -= Math.abs(amount);
+}
+
+function getDampenedMutation(){
+  console.log(dampening);
+  if (dampening > 0) {
+    return currentMutation / dampening;
+  }else{
+    return currentMutation
+  }
 }
 
 function drawSegment(){
@@ -128,8 +140,8 @@ function drawSegment(){
   context.strokeStyle = '#00000';
   context.beginPath();
   context.moveTo(currentX, currentY);
-  var newX = getX(currentAngle, currentMutation);
-  var newY = getY(currentAngle, currentMutation);
+  var newX = getX(currentAngle, getDampenedMutation());
+  var newY = getY(currentAngle, getDampenedMutation());
   context.lineTo(newX, newY);
   // context.arcTo(currentX, currentY, newX, newY, radius);
   context.stroke();
@@ -144,7 +156,7 @@ function getX(angle, mutation){
 }
 
 function getY(angle, mutation){
-  return Math.sin(angle) * (radius+mutation) + centerY - 1/ Math.tan(mutation);
+  return Math.sin(angle) * (radius+mutation) + centerY - Math.tan(mutation);
 }
 
 drawSegment();
