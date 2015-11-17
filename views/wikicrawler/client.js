@@ -127,7 +127,6 @@ function mutate(amount){
 }
 
 function getDampenedMutation(){
-  console.log(dampening);
   if (dampening > 0) {
     return currentMutation / dampening;
   }else{
@@ -143,7 +142,6 @@ function drawSegment(){
   var newX = getX(currentAngle, getDampenedMutation());
   var newY = getY(currentAngle, getDampenedMutation());
   context.lineTo(newX, newY);
-  // context.arcTo(currentX, currentY, newX, newY, radius);
   context.stroke();
   currentX = newX;
   currentY = newY;
@@ -152,49 +150,11 @@ function drawSegment(){
 }
 
 function getX(angle, mutation){
-  return Math.cos(angle) * (radius+mutation) + centerX - Math.tan(mutation)/2;
+  return Math.cos(angle) * (radius+mutation*Math.sin(mutation)^3) + centerX - Math.tan(mutation)/2;
 }
 
 function getY(angle, mutation){
-  return Math.sin(angle) * (radius+mutation) + centerY - Math.tan(mutation);
+  return Math.sin(angle) * (radius+mutation*Math.sin(mutation)^3) + centerY - Math.tan(mutation);
 }
 
 drawSegment();
-
-
-
-
-
-function createCircle(x, y, callback) {
-    var radius = 75;
-    var endPercent = 101;
-    var curPerc = 0;
-    var counterClockwise = false;
-    var circ = Math.PI * 2;
-    var quart = Math.PI / 2;
-
-    context.lineWidth = 1;
-    context.strokeStyle = '#00000';
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-
-
-    function animate(current) {
-        radius -= 1;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.beginPath();
-        context.arc(x, y, radius, -(quart), ((circ) * current) - quart, false);
-        console.log(x,y,radius);
-        context.stroke();
-        curPerc++;
-        if (curPerc <= endPercent) {
-            requestAnimationFrame(function () {
-                animate(curPerc / 100)
-            });
-        } else {
-
-            if (callback) callback.call();
-        }
-    }
-    animate();
-}
