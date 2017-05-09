@@ -6,8 +6,20 @@ a{
   color: #00B7FF;
 }
 
+#wiki{
+  position: absolute;
+  min-height: 100%;
+  width: 20%;
+  top: 0px;
+  left: 0px;
+  background-color: black;
+  color: white;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
 #canvas{
   position: fixed;
-  left: 0px;
+  left: 10%;
   top: 0px;
 }

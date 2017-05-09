@@ -130,7 +130,7 @@ function getDampenedMutation(){
   if (dampening > 0) {
     return currentMutation / dampening;
   }else{
-    return currentMutation
+    return currentMutation;
   }
 }
 
