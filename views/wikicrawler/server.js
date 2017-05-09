@@ -19,7 +19,12 @@ module.exports = {
   getPage: function(req, res, next) {
     var query = url.parse(req.url, true).query;
     wikipedia.page.data(query.page, { content: true }, function(response) {
-      var content = h2p(response.text['*']);
+      var content;
+      try{
+        content = h2p(response.text['*']);
+      }catch(e){
+        content = "";
+      }
       response.text = '';
       var sentimentRating = sentiment(content);
       response.sentiment = sentimentRating.score;
