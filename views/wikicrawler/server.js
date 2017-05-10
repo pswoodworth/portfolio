@@ -11,25 +11,29 @@ module.exports = {
 
     var locals = {
       view: 'wikicrawler',
-      title: 'Express'
+      title: 'circle philosophy'
     };
 
     res.render('wikicrawler/template', locals);
   },
   getPage: function(req, res, next) {
     var query = url.parse(req.url, true).query;
-    wikipedia.page.data(query.page, { content: true }, function(response) {
-      var content;
-      try{
-        content = h2p(response.text['*']);
-      }catch(e){
-        content = "";
-      }
-      response.text = '';
-      var sentimentRating = sentiment(content);
-      response.sentiment = sentimentRating.score;
+    getPageData(query.page, function(response){
       res.send(response);
     });
   }
+};
 
+var getPageData = function(page, callback){
+  wikipedia.page.data(page, { content: true }, function(response) {
+    if (response){
+      var content = h2p(response.text['*']);
+      response.text = '';
+      var sentimentRating = sentiment(content);
+      response.sentiment = sentimentRating.score;
+      callback(response);
+    }else{
+      getPageData(page);
+    }
+  });
 };
